@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #3498db;
+    color: #ffffff;
+    padding: 1rem;
+    text-align: center;
+}
+
+main {
+    padding: 1rem;
+}
+
+h1 {
+    color: #156193;
+}
+
+h2 {
+    color: #3498db;
+}
+
+p {
+    color: #555555;
+}
+
+.university-details {
+    background-color: #f8f9fa; /* Jumbotron background color */
+    padding: 2rem; /* Jumbotron padding */
+    margin: 0 auto; /* Center the section horizontally */
+    max-width: 600px; /* Adjust the max width as needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added a subtle box shadow for depth */
+}

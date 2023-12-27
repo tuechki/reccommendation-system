@@ -1,0 +1,75 @@
+.login-form,
+.login-form * {
+  box-sizing: border-box;
+}
+.login-form {
+  background: #ffffff;
+  width: 94.5rem;
+  height: 61.375rem;
+  position: relative;
+  overflow: hidden;
+}
+.login-form-field {
+  background: #d9d9d9;
+  width: 29.125rem;
+  height: 3.4375rem;
+  position: absolute;
+  left: 31.375rem;
+  top: 25.8125rem;
+}
+.login-button {
+  background: #d9d9d9;
+  width: 10.4375rem;
+  height: 3.1875rem;
+  position: absolute;
+  left: 40.75rem;
+  top: 43rem;
+}
+.create-registration-url {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  position: absolute;
+  left: 39.3125rem;
+  top: 36.375rem;
+  width: 14.3125rem;
+  height: 0.9375rem;
+}
+.login-heading {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  position: absolute;
+  left: 41.6875rem;
+  top: 17.5625rem;
+  width: 8.5rem;
+  height: 3.5rem;
+}
+.login-button-text {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  position: absolute;
+  left: 44.3125rem;
+  top: 43.75rem;
+  width: 3.3125rem;
+  height: 1.6875rem;
+}
+.email {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  position: absolute;
+  left: 32.6875rem;
+  top: 26.875rem;
+  width: 26.4375rem;
+  height: 1.25rem;
+}

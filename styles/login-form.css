@@ -31,7 +31,7 @@ label {
 
 input,
 select,
-textarea{
+textarea {
   width: 90%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -39,8 +39,14 @@ textarea{
 }
 
 input:hover,
-select:hover {
+select:hover,
+textarea:hover {
   border: 1px solid green;
+}
+
+textarea {
+  height: 100px; /* Set a specific height for textarea */
+  resize: vertical; /* Allow vertical resizing only */
 }
 
 button {

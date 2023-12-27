@@ -1,9 +1,5 @@
 <?php
-include 'db_connection.php';
-
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
+include 'db-connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];

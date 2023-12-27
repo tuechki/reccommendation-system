@@ -30,3 +30,29 @@ h2 {
 p {
   color: #333;
 }
+
+.select-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.select-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.unselect {
+  background-color: #ff0000;
+  color: #fff;
+}
+
+.unselect:hover {
+  background-color: #990000;
+  color: #fff;
+}
+

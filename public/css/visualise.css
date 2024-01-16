@@ -1,0 +1,273 @@
+
+#disciplineCV{
+    padding-bottom: 4em;
+    background-color: white;
+}
+.mainContainer{
+    font-weight: 400;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    -webkit-box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 4em;
+    font-family: 'Jost';
+}
+
+a[class="adminLink"]{
+    width: 15%;
+    margin: 1em auto;
+}
+
+a[class="adminLink"]:link, a[class="adminLink"]:visited, a[class="adminLink"]:active, p[class="adminLink"]{
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    background-color: #F27405;
+    border: 5px solid transparent;
+
+}
+
+a[class="adminLink"]:hover{
+    border: 5px solid #1C1E27;
+    color: #1C1E27;
+    transition: all .2s ease-in-out;
+}
+
+.title{
+    background-color: #FFCB00;
+    margin-top: 2em;
+	padding-left: 2em;
+	width: 80%;
+	clip-path: polygon(0 0, 75% 0%, 78% 49%, 75% 100%, 0% 100%);
+
+}
+
+.title h1{
+    width: 75%;
+}
+
+#credits{
+    width:10%;
+}
+
+#credits h3{
+    transform: translateY(1.7em);
+    color: #1C1E27;
+    font-size: 1.5em;
+}
+
+
+.mainInfoContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 2em;
+}
+#specialties{
+    padding-left: 2em;
+    width: 50%;
+}
+
+#elective{
+    width: 27%;
+    border-left: 5px solid #1C1E27;
+    padding-left: 2em;
+    height: 8em;
+}
+
+.mainContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#lecturer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-left: 2em;
+    margin-top: 1em;
+}
+
+#lecturer p{
+    padding: 0.3em 2em;
+}
+
+#category{
+    border-right: 8px solid #F27405;
+    padding-right: 2em;
+    height: 8em;
+}
+
+#annotation{
+    width: 70%;
+    text-align: justify;
+    padding: 2em 0 2em 2em;
+}
+
+#grayContainer{
+    border-top: 3px solid #F27405;
+    border-bottom: 3px solid #F27405;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+    background-color: #E3E7EA;
+    width:100%;
+}
+
+#prerequisites{
+    margin-top: 2em;
+    padding: 0 0 2em 0;
+    border-left: 5px solid #1C1E27;
+}
+
+#expectations{
+    margin-top: 2em;
+    padding: 0 0 2em 0;
+    border-left: 5px solid #1C1E27;
+}
+
+#prerequisites h4, #expectations h4{
+    background-color:#F27405;
+    line-height: 2.5em;
+    color: white;
+    font-size: 1.3em;
+    padding-left: 2em;
+}
+#prerequisites p, #expectations p{
+    padding-left: 2em;
+}
+
+.tableTitle{
+    background-color:#1C1E27;
+    color: white;
+    width:69.60%;
+    margin: 0 auto;
+}
+.tableTitle h4{
+    font-size: 1.3em;
+    padding-left: 3em;;
+    line-height: 2.5em;
+    margin: 0;
+}
+
+table{
+    width:70%;
+    margin: 0 auto;
+}
+th{
+    background-color:#FFCB00;
+    font-size:1.5em;
+    line-height: 2.5em;
+}
+
+/*doesnt work*/
+tr {
+   border: 1px solid #1C1E27;
+ }
+td{
+    padding: 1em;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+    border-collapse: collapse;
+}
+
+#content, #synopsis, #bibliography{
+    margin-top: 4em;
+    width: 100%;
+}
+
+#administrative h2{
+    border-top: 2px solid #F27405;
+    border-bottom: 2px solid #F27405;
+    color: #F27405;
+    padding: 1em 2em;
+}
+
+#administrative {
+    margin-top: 4em;
+    font-size: 1.3em;
+}
+
+.adminInfoContent{
+    padding-left: 3em;
+}
+
+#reviewNav{
+    width: min-content;
+    height: 4em;
+    margin: 3em auto;
+    border:5px solid transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+}
+
+#reviewNav a[class="adminLink"], #reviewNav p[class="adminLink"]{
+    margin: 0;
+    width: max-content;
+    
+}
+
+.activeNavLink{
+    border:5px solid transparent;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(238, 153, 78);
+    font-weight: 700;
+}
+
+#reviewNav input[type="submit"]{
+    background-color:#F27405;
+    border: 5px solid transparent;
+    margin: 0;
+    width: max-content;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+    background-color: #ee594e;
+    margin: 0;
+    line-height: 2em;
+    border: 5px solid transparent;
+
+}
+
+#reviewNav input[type="submit"]:hover{
+    color: #1C1E27;
+    background-color: #eb4034;
+    border: 5px solid #1C1E27;
+    transition: all .2s ease-in-out;
+}
+
+/* Dependancy tables CSS*/
+
+.dependancyTable{
+    width: 100%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.dependancyTable a{
+    display: block;
+    width: 60%;
+}
+
+.dependancyTable a[class="commonLink"]:link, 
+.dependancyTable a[class="commonLink"]:visited, 
+.dependancyTable a[class="commonLink"]:active {
+    border: none;
+}
+
+.dependancyTable a[class="commonLink"]:hover{
+    background-color: rgba(255, 255, 255, 0);
+   
+}

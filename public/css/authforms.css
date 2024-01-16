@@ -1,0 +1,89 @@
+.authFormContainer{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    align-items: center;
+    background-color: rgb(255, 239, 149);
+    padding: 3em;
+}
+
+.authFormContainer h2{
+    color: orange;
+    margin-bottom: 2em;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2em;
+    line-height: 2em;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form-group input{
+    width: 50%;
+}
+
+.authFormContainer form{
+    width: 60%;
+    margin: 0 auto;
+}
+
+input[type="submit"]{
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    color: #1C1E27;
+    border: 5px solid #1C1E27;
+}
+
+input[type="submit"]:hover{
+    background-color: #FFCB00;
+    font-weight: 700;
+    transition: all .2s ease-in-out;
+}
+
+.authFormContainer .commonLink{
+    margin: 0;
+}
+
+.authFormContainer .buttonRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top:2em;
+}
+
+input[type="text"], input[type="email"], input[type="password"]{
+    border:none;
+    border-bottom: 2px solid black;
+
+}
+
+.inputAndSpan{
+    width: 50%;
+    margin: -0.5em 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputAndSpan label{
+    width: 50%;
+}
+
+.inputAndSpan input{
+    width: 100%;
+    height: 2em;
+}
+
+.invalid-feedback{
+    color: #ee594e;
+}

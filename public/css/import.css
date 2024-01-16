@@ -1,0 +1,66 @@
+.importPageContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.info{
+    width: 50%;
+}
+
+
+.info p:first-of-type{
+    border-bottom: 2px solid #F27405;
+}
+
+.info p, .info h3{
+    text-align: justify;  margin: 2em;
+    padding-bottom: 2em;
+}
+
+.importContainer{
+    padding: 2em 4em;
+    width: 50%;
+    height: 100vh;
+    background-color: #FFDE86;
+}
+
+.info h1{
+    margin: 1em;
+    font-weight: 700;
+}
+
+#formBody, #importJson{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#importJson textarea{
+    height: 25em;
+}
+
+#importJson label{
+    margin-bottom: 1em;
+    color: #F27405;
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+#importJson input[type="submit"]{
+background-color: #F27405; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+#importJson input[type="submit"]:hover{
+    background-color: rgb(250, 218, 40); /* Green */
+    color: #1C1E27;
+    font-size: 1.5em;
+    border: 4px solid #1C1E27;
+    transition: all .2s ease-in-out;
+}

@@ -25,7 +25,7 @@
     xmlhttp.send();
     });
 
-    dependenciesLink.addEventListener("click", function(){
+    dependenciesLink.addEventListener("click", async function () {
         event.preventDefault();
         this.classList.add("activeNavLink");
         shortLink.classList.remove("activeNavLink");
@@ -34,17 +34,56 @@
 
    
         var xmlhttp = new XMLHttpRequest();
-       xmlhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-           document.getElementById("disciplineCV").innerHTML = this.responseText;
-           let annotation = document.getElementById('grayContainer');
-           annotation.remove();
-           console.log(this.responseText);
-         }
-       };
-       xmlhttp.open("GET","../detailedWithDependencies/" + disciplineId ,true);
-       xmlhttp.send();
-       });
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("disciplineCV").innerHTML = this.responseText;
+                let annotation = document.getElementById('grayContainer');
+                annotation.remove();
+                console.log(this.responseText);
+            }
+        };
+        xmlhttp.open("GET", "../detailedWithDependencies/" + disciplineId, true);
+        xmlhttp.send();
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        await sleep(100);
+
+        var disciplinesChartContainer = document.getElementById("dependencyChartContainer");
+        disciplinesChartContainer.style.height = 600 + "px";
+
+        var canvas = document.createElement("canvas");
+        canvas.id = "dependencyChart";
+        canvas.width = 400;
+        canvas.height = 400;
+        console.log('canvas created');
+        disciplinesChartContainer.appendChild(canvas);
+
+        console.log('canvas appended');
+
+
+        var dependenciesChartDataJson = document.getElementById("dependenciesChartData");
+        console.log(dependenciesChartDataJson.value);
+        var chartData = JSON.parse(dependenciesChartDataJson.value);
+
+        var labels = chartData.labels;
+        var data = chartData.data;
+        var backgroundColor = chartData.backgroundColor;
+
+        var ctx = document.getElementById("dependencyChart").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: backgroundColor
+                }]
+            }
+        });
+    });
 
        detailedLink.addEventListener("click", function(){
         event.preventDefault();

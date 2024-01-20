@@ -10,71 +10,35 @@
             $this->curriculumModel = $this->model('Curriculum');
         }
 
-        
-        public function index(){
+         public function index(){
+             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+               $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+               $jsonFields = urldecode($_POST['jsonFields']);
+               $cleanedJson = $this->clean_json_string($jsonFields);
+               $fields = json_decode($cleanedJson, true);
 
-            /* Searching functionality for discipline is included in index view and method. */
-            /* If a search query was sent, show only query results in index. */
+               $disciplines = $this->disciplineModel->searchDisciplines($fields);
 
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-              $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-  
-              $field=($_POST['field']);
-              $searchInput=($_POST['searchInput']);
-  
-              $disciplines = $this->disciplineModel->search($field, $searchInput);
+               if(sizeof($disciplines) == 0){
+                 $data = [
+                   'no_results_message' => 'Няма намерени резултати за това търсене.',
+                   'disciplines' => '',
+                 ];
+               } else{
+                 $data = [
+                   'no_results_message' => '',
+                   'disciplines' => $disciplines,
+                 ];
+               }
 
-              $displaySearchedField;
-              switch($field) {
-                case "disciplineNameBg":
-                  $displaySearchedField = "Име";
-                break;
-                case "disciplineNameEng":
-                  $displaySearchedField = "English Name";
-                break;
-                case "credits":
-                  $displaySearchedField = "Кредити";
-                break;
-                case "category":
-                  $displaySearchedField = "Категория";
-                break;
-                case "semester":
-                  $displaySearchedField = "Семестър";
-                break;
-                case "professor":
-                  $displaySearchedField = "Преподавател";
-                break;
-                case "elective":
-                  $displaySearchedField = "Статут";
-                break;
-              }
-
-              if(sizeof($disciplines) == 0){
-                $data = [
-                  'searchedField' => $displaySearchedField,
-                  'searchedValue' => $searchInput,
-                  'no_results_message' => 'Няма намерени резултати за това търсене.',
-                  'disciplines' => '',
-                ];
-              } else{
-                $data = [
-                  'searchedField' => $displaySearchedField,
-                  'searchedValue' => $searchInput,
-                  'no_results_message' => '',
-                  'disciplines' => $disciplines,
-                ];
-              }
-             
-            } else {
-              /* Normal disciplines index behaviour - display all disciplines */
-              $disciplines = $this->disciplineModel->getDisciplines();
-
-              $data = [
-                  'disciplines' => $disciplines,
-              ];
-            }
-              $this->view('disciplines/index', $data);
-        }
+             } else {
+               $disciplines = $this->disciplineModel->getDisciplines();
+               $data = [
+                   'disciplines' => $disciplines,
+               ];
+             }
+               $this->view('disciplines/index', $data);
+         }
 
 
           public function import(){
@@ -728,7 +692,20 @@
               redirect('disciplines');
             }
           }
-        } 
+        }
 
+    private function clean_json_string($jsonString) {
+        // Remove BOM (Byte Order Mark) if present
+        $jsonString = preg_replace('/^\xEF\xBB\xBF/', '', $jsonString);
+
+        // Remove non-printable characters (other than spaces)
+        $jsonString = preg_replace('/[[:cntrl:]&&:space:]]/', '', $jsonString);
+
+        // Trim leading and trailing spaces
+        $jsonString = trim($jsonString);
+
+        return $jsonString;
     }
+
+}
 ?>          

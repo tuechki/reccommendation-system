@@ -228,6 +228,36 @@
             return $results;
         }
 
+        public function searchDisciplines($searchCriteria) {
+            $whereConditions = [];
+            $fieldsValues = [];
+
+            foreach ($searchCriteria as $field => $value) {
+                if (!empty($value)) {
+                    $whereConditions[] = is_numeric($value) ? "$field = ?" : "$field LIKE ?";
+                    $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                }
+            }
+
+            $whereClause = implode(' AND ', $whereConditions);
+            $query = "SELECT * FROM `disciplines`";
+
+            if (!empty($whereConditions)) {
+                $query .= " WHERE $whereClause";
+            }
+
+            $this->db->query($query);
+
+            foreach ($fieldsValues as $key => $value) {
+                $this->db->bind($key + 1, $value);
+            }
+
+            $this->db->execute();
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
         public function getLastInserted(){
             $id = $this->db->getLastInsertedId();
             return $id;

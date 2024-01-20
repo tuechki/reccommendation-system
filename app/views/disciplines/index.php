@@ -1,14 +1,14 @@
 <?php
 $fields = [
-    "disciplineNameBg" => "Дисциплна",
-    "specialtiesAndCourses" => "Специалност",
-    "category" => "Категория",
-    "oks" => "ОКС",
+    "specialtiesAndCourses" => "Специалност ",
+    "category" => "Категория   ",
+    "oks" => "ОКС         ",
+    "elective" => "Статут      ",
+    "credits" => "Кредити     ",
+    "semester" => "Семестър    ",
+    "disciplineNameBg" => "Дисциплна   ",
     "professor" => "Преподавател",
-    "elective" => "Статут",
-    "credits" => "Кредити",
-    "semester" => "Семестър",
-    "code" => "Код",
+    "code" => "Код         "
 ];
 ?>
 
@@ -20,51 +20,70 @@ $fields = [
 
         <div id="searchDiv">
             <form id="disciplinesSearchForm" action="<?php echo URLROOT; ?>/disciplines/index" method="post">
-                <?php foreach ($fields as $field => $label): ?>
-                    <label for="<?php echo $field; ?>"><?php echo $label; ?>:</label>
-                    <?php if ($field === "category"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете категория --</option>
-                            <option value="ОКН" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'ОКН') ? 'selected' : ''; ?>>ОКН</option>
-                            <option value="ЯКН" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'ЯКН') ? 'selected' : ''; ?>>ЯКН</option>
-                            <option value="М" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'М') ? 'selected' : ''; ?>>М</option>
-                        </select>
-                    <?php elseif ($field === "oks"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете ОКС --</option>
-                            <option value="Бакалавър" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Бакалавър') ? 'selected' : ''; ?>>Бакалавър</option>
-                            <option value="Магистър" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Магистър') ? 'selected' : ''; ?>>Магистър</option>
-                        </select>
-                    <?php elseif ($field === "elective"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете статут --</option>
-                            <option value="Задължителна" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Задължителна') ? 'selected' : ''; ?>>Задължителна</option>
-                            <option value="Избираема" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Избираема') ? 'selected' : ''; ?>>Избираема</option>
-                        </select>
-                    <?php elseif ($field === "credits"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете кредити --</option>
-                            <?php for ($i = 3; $i <= 9; $i++): ?>
-                                <option value="<?php echo $i; ?>" <?php echo (isset($_POST[$field]) && $_POST[$field] == $i) ? 'selected' : ''; ?>><?php echo $i; ?></option>
-                            <?php endfor; ?>
-                        </select>
-                    <?php elseif ($field === "semester"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете семестър --</option>
-                            <option value="Летен" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Летен') ? 'selected' : ''; ?>>Летен</option>
-                            <option value="Зимен" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Зимен') ? 'selected' : ''; ?>>Зимен</option>
-                        </select>
-                    <?php elseif ($field === "specialtiesAndCourses"): ?>
-                        <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
-                            <option value="">-- Изберете специалност --</option>
-                            <option value="Компютърни науки" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Компютърни науки') ? 'selected' : ''; ?>>Компютърни науки</option>
-                            <option value="Софтуерно инженерство" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Софтуерно инженерство') ? 'selected' : ''; ?>>Софтуерно инженерство</option>
-                            <option value="Математика" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Математика') ? 'selected' : ''; ?>>Математика</option>
-                        </select>
-                    <?php else: ?>
-                        <input type="text" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="<?php echo isset($_POST[$field]) ? htmlspecialchars($_POST[$field]) : ''; ?>">
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                <?php
+                $counter = 0;
+                foreach ($fields as $field => $label):
+                    $newField = $field . "-new";
+                    if ($counter % 3 === 0) {
+                        echo '<div class="field-group">';
+                    }
+                    ?>
+                    <div class="field-container">
+                        <label for="<?php echo $field; ?>"><?php echo $label; ?>:</label>
+                        <?php if ($field === "category"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $newField; ?>">
+                                <option value="">-- Изберете категория --</option>
+                                <option value="ОКН" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'ОКН') ? 'selected' : ''; ?>>ОКН</option>
+                                <option value="ЯКН" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'ЯКН') ? 'selected' : ''; ?>>ЯКН</option>
+                                <option value="М" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'М') ? 'selected' : ''; ?>>М</option>
+                            </select>
+                        <?php elseif ($field === "oks"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
+                                <option value="">-- Изберете ОКС --</option>
+                                <option value="Бакалавър" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Бакалавър') ? 'selected' : ''; ?>>Бакалавър</option>
+                                <option value="Магистър" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Магистър') ? 'selected' : ''; ?>>Магистър</option>
+                            </select>
+                        <?php elseif ($field === "elective"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $newField; ?>">
+                                <option value="">-- Изберете статут --</option>
+                                <option value="Задължителна" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Задължителна') ? 'selected' : ''; ?>>Задължителна</option>
+                                <option value="Избираема" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Избираема') ? 'selected' : ''; ?>>Избираема</option>
+                            </select>
+                        <?php elseif ($field === "credits"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $newField; ?>">
+                                <option value="">-- Изберете кредити --</option>
+                                <?php for ($i = 3; $i <= 9; $i++): ?>
+                                    <option value="<?php echo $i; ?>" <?php echo (isset($_POST[$field]) && $_POST[$field] == $i) ? 'selected' : ''; ?>><?php echo $i; ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        <?php elseif ($field === "semester"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
+                                <option value="">-- Изберете семестър --</option>
+                                <option value="Летен" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Летен') ? 'selected' : ''; ?>>Летен</option>
+                                <option value="Зимен" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Зимен') ? 'selected' : ''; ?>>Зимен</option>
+                            </select>
+                        <?php elseif ($field === "specialtiesAndCourses"): ?>
+                            <select name="<?php echo $field; ?>" id="<?php echo $field; ?>">
+                                <option value="">-- Изберете специалност --</option>
+                                <option value="Компютърни науки" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Компютърни науки') ? 'selected' : ''; ?>>Компютърни науки</option>
+                                <option value="Софтуерно инженерство" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Софтуерно инженерство') ? 'selected' : ''; ?>>Софтуерно инженерство</option>
+                                <option value="Математика" <?php echo (isset($_POST[$field]) && $_POST[$field] === 'Математика') ? 'selected' : ''; ?>>Математика</option>
+                            </select>
+                        <?php else: ?>
+                            <input type="text" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="<?php echo isset($_POST[$field]) ? htmlspecialchars($_POST[$field]) : ''; ?>">
+                        <?php endif; ?>
+                    </div>
+                    <?php
+                    if ($counter % 3 === 2) {
+                        echo '</div>';
+                    }
+                    $counter++;
+                endforeach;
+                // Check if the last group is incomplete
+                if ($counter % 3 !== 0) {
+                    echo '</div>';
+                }
+                ?>
 
                 <div id="buttonDiv">
                     <input type="submit" value="Намери дисциплина">

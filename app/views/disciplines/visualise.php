@@ -32,5 +32,6 @@ $path = URLROOT . "/public/JSONS/file" . $data['discipline']->id . ".json";
 </div>
 
 <script type="text/javascript" src="../../public/js/loadReviews.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

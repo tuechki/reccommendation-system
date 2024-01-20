@@ -3,6 +3,12 @@
     padding-bottom: 4em;
     background-color: white;
 }
+
+#dependencyChartContainer {
+    width: 100%;
+    height: 10px;
+}
+
 .mainContainer{
     font-weight: 400;
     width: 80%;

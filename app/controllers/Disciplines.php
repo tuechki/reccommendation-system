@@ -394,6 +394,7 @@
               "<h4>Преподавател</h4>" .
                 "<p>" . $discipline->professor ."</p>" .
               "</div>" .
+                  "<div id=\"dependencyChartContainer\"></div>" .
               "<div id=\"grayContainer\">" .
               "<div id=\"annotation\">" .
               "<h4>Анотация</h4>" .
@@ -527,6 +528,18 @@
               $display = $display . "<br>" . "<p style=\"padding-left: 2em;\"><em>Няма зададени зависимости за тази дисциплина.</em></p>";
               return $display;
             }
+
+            $dependsOnCount = is_array($dependsOnDisciplines) ? count($dependsOnDisciplines) : 0;
+            $dependByCount = is_array($dependByThisDiscipline) ? count($dependByThisDiscipline) : 0;
+
+            $dependenciesChartData = [
+                'labels' => ['Дисциплината зависи от', 'От дисциплината зsависят'],
+                'data'   => [$dependsOnCount, $dependByCount],
+                'backgroundColor' => ["#FF6384", "#36A2EB"]
+            ];
+            $chartDataJson = json_encode($dependenciesChartData);
+
+            $display = $display . '<input type="hidden" id="dependenciesChartData" value="' . htmlspecialchars($chartDataJson, ENT_QUOTES, 'UTF-8') . '">';
 
             if(!empty($dependsOnDisciplines)){
               $display = $display . "<div class=\"dependancyTable\">" .
@@ -675,6 +688,7 @@
           /* Linking the google font in this file too, since the font is served from google and not locally. */
           "<link href=\"https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,400;0,500;0,600;1,300;1,600&display=swap\" rel=\"stylesheet\">" . 
           $embeddedStyle .
+          "<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>" . 
           "</head>" .
           "<body>" .
           "<div class=\"mainContainer\">"; 

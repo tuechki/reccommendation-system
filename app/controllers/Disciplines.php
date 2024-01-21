@@ -32,24 +32,31 @@
                }
 
              } else {
-                 /* Normal disciplines index behaviour - display all disciplines */
-                 $disciplines = $this->disciplineModel->getDisciplines();
-                 $enrolledDisciplinesIds = [];
-                 if (isset($_SESSION['user_id'])) {
-                     // Get the user ID from the session
-                     $userId = $_SESSION['user_id'];
-                     $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
-                 }
-
-                 $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
-                 $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
-                 $enrollmentMessage = "";
-                 if ($enrollmentSuccess) {
-                     $enrollmentMessage = "Дисциплината е записана успешно!";
-                 } else if ($enrollmentHappened) {
-                     $enrollmentMessage = "Записването е неуспешно. Моля опитайте отново!";
-                 }
-
+              if(sizeof($disciplines) == 0){
+                $data = [
+                  'searchedField' => $displaySearchedField,
+                  'searchedValue' => $searchInput,
+                  'no_results_message' => 'Няма намерени резултати за това търсене.',
+                  'disciplines' => '',
+                ];
+              } else{
+                $data = [
+                  'searchedField' => $displaySearchedField,
+                  'searchedValue' => $searchInput,
+                  'no_results_message' => '',
+                  'disciplines' => $disciplines,
+                ];
+              }
+             
+            } else {
+              /* Normal disciplines index behaviour - display all disciplines */
+              $disciplines = $this->disciplineModel->getDisciplines();
+              $enrolledDisciplinesIds = [];
+              if (isset($_SESSION['user_id'])) {
+                  $userId = $_SESSION['user_id'];
+                  $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+              }
+              
                  $data = [
                      'disciplines' => $disciplines,
                      'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
@@ -59,6 +66,83 @@
              $this->view('disciplines/index', $data);
          }
 
+         public function enrolled(){
+
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+                $field=($_POST['field']);
+                $searchInput=($_POST['searchInput']);
+
+                $disciplines = $this->disciplineModel->search($field, $searchInput);
+
+                $displaySearchedField;
+                switch($field) {
+                    case "disciplineNameBg":
+                        $displaySearchedField = "Име";
+                        break;
+                    case "disciplineNameEng":
+                        $displaySearchedField = "English Name";
+                        break;
+                    case "credits":
+                        $displaySearchedField = "Кредити";
+                        break;
+                    case "category":
+                        $displaySearchedField = "Категория";
+                        break;
+                    case "semester":
+                        $displaySearchedField = "Семестър";
+                        break;
+                    case "professor":
+                        $displaySearchedField = "Преподавател";
+                        break;
+                    case "elective":
+                        $displaySearchedField = "Статут";
+                        break;
+                }
+
+                if(sizeof($disciplines) == 0){
+                    $data = [
+                        'searchedField' => $displaySearchedField,
+                        'searchedValue' => $searchInput,
+                        'no_results_message' => 'Няма намерени резултати за това търсене.',
+                        'disciplines' => '',
+                    ];
+                } else{
+                    $data = [
+                        'searchedField' => $displaySearchedField,
+                        'searchedValue' => $searchInput,
+                        'no_results_message' => '',
+                        'disciplines' => $disciplines,
+                    ];
+                }
+
+            } else {
+                /* Normal disciplines index behaviour - display all disciplines */
+                $disciplines = [];
+                if (isset($_SESSION['user_id'])) {
+                    // Get the user ID from the session
+                    $userId = $_SESSION['user_id'];
+                    $disciplines = $this->disciplineModel->getDisciplinesByUserId($userId);
+                }
+
+                $unenrollmentHappened = isset($_GET['unenrollmentSuccessful']);
+                $unenrollmentSuccess = $unenrollmentHappened && $_GET['unenrollmentSuccessful'] === 'true';
+                $unenrollmentMessage = "";
+                if ($unenrollmentSuccess) {
+                    $unenrollmentMessage = "Дисциплината е отписана успешно!";
+                } else if ($unenrollmentHappened) {
+                    $unenrollmentMessage = "Отписването е неуспешно. Моля опитайте отново!";
+                }
+
+                $data = [
+                    'disciplines' => $disciplines,
+                    'unenrollmentMessage' => $unenrollmentMessage
+                ];
+            }
+            $this->view('disciplines/enrolled', $data);
+        }
+
         public function import()
         {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -66,7 +150,6 @@
 
                 try {
                     $this->disciplineModel->getDatabase()->beginTransaction();
-
                     foreach ($jsonArray as $json) {
                         $disciplineNameBg = $json['Дисциплина'];
                         $disciplineNameEng = $json['Discipline'];
@@ -498,7 +581,6 @@
             /* If a search query was sent, show only query results in index. */
 
             if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["enroll_button"])) {
-                echo('in post');
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
                 $userId = ($_POST['userId']);

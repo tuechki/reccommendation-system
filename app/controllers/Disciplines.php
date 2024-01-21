@@ -32,14 +32,32 @@
                }
 
              } else {
-               $disciplines = $this->disciplineModel->getDisciplines();
-               $data = [
-                   'disciplines' => $disciplines,
-               ];
-             }
-               $this->view('disciplines/index', $data);
-         }
+                 /* Normal disciplines index behaviour - display all disciplines */
+                 $disciplines = $this->disciplineModel->getDisciplines();
+                 $enrolledDisciplinesIds = [];
+                 if (isset($_SESSION['user_id'])) {
+                     // Get the user ID from the session
+                     $userId = $_SESSION['user_id'];
+                     $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+                 }
 
+                 $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
+                 $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
+                 $enrollmentMessage = "";
+                 if ($enrollmentSuccess) {
+                     $enrollmentMessage = "Дисциплината е записана успешно!";
+                 } else if ($enrollmentHappened) {
+                     $enrollmentMessage = "Записването е неуспешно. Моля опитайте отново!";
+                 }
+
+                 $data = [
+                     'disciplines' => $disciplines,
+                     'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+                     'enrollmentMessage' => $enrollmentMessage
+                 ];
+             }
+             $this->view('disciplines/index', $data);
+         }
 
         public function import()
         {
@@ -473,6 +491,26 @@
                   $this->view('disciplines/edit', $data);
             }
           }
+
+        public function enroll(){
+
+            /* Searching functionality for discipline is included in index view and method. */
+            /* If a search query was sent, show only query results in index. */
+
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["enroll_button"])) {
+                echo('in post');
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+                $userId = ($_POST['userId']);
+                $disciplineId = ($_POST['disciplineId']);
+
+                $enrollmentSuccessful = $this->disciplineModel->enroll($userId, $disciplineId);
+                $enrollmentSuccessfulString = var_export($enrollmentSuccessful, true);
+
+                header("Location: " . URLROOT . "/disciplines/index?enrollmentSuccessful=" . $enrollmentSuccessfulString);
+                exit();
+            }
+        }
           
           private function getFile($id){
             $json_data = file_get_contents(URLROOT . "/public/JSONS/file" . $id . ".json");

@@ -146,6 +146,74 @@ $fields = [
     </div>
 <?php } ?>
 
+    <?php if($data['no_results_message']){?>
+            <div id="noResults">
+            <p><?php echo $data['no_results_message']; ?></p>
+            </div>
+    <?php } else {?>
+        <div class="curriculumList">
+            <?php
+            foreach($data['disciplines'] as $discipline) :
+                ?>
+                <div class="discipline-container curriculumRow">
+                    <a class="commonLink" href="<?php echo URLROOT . "/disciplines/visualise/" . $discipline->id;?>"><?php echo $discipline->disciplineNameBg;?></a>
+                    <?php if(isset($_SESSION['user_id'])) : ?>
+                        <form action="<?php echo URLROOT . "/disciplines/enroll/" ?>" method="POST">
+                            <input type="hidden" name="disciplineId" value="<?php echo $discipline->id; ?>">
+                            <input type="hidden" name="userId" value="<?php echo $_SESSION['user_id']; ?>">
+                            <div class="enroll-button-container">
+                                <?php
+                                $isEnrolled = false;
+                                foreach ($data['enrolledDisciplinesIds'] as $enrolledDiscipline) {
+                                    if ($enrolledDiscipline->disciplineId == $discipline->id) {
+                                        $isEnrolled = true;
+                                        break;
+                                    }
+                                }
+                                $buttonClass = $isEnrolled ? 'enroll-button-disabled' : 'enroll-button';
+                                $buttonText = $isEnrolled ? 'Записан' : 'Запиши';
+                                ?>
+
+                                <button name="enroll_button" class="<?php echo $buttonClass; ?>" <?php echo $isEnrolled ? 'disabled' : ''; ?>>
+                                    <?php echo $buttonText; ?>
+                                </button>
+                            </div>
+                        </form>
+                        <?php
+                        $enrollmentMessage = $data['enrollmentMessage'];
+                        ?>
+                        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php } ?>
+</div>
+<div id="enrollmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEnrollmentModal()">&times;</span>
+        <p id="enrollmentMessage"></p>
+    </div>
 </div>
 </body>
+<script type="text/javascript">
+    // Retrieve and display the enrollment status message
+    var enrollmentMessage = document.getElementById("enrollmentMessageHidden").value;
+    if (enrollmentMessage != "") {
+        openEnrollmentModal(enrollmentMessage);
+    }
+
+    function openEnrollmentModal(message) {
+        var modal = document.getElementById("enrollmentModal");
+        var messageElement = document.getElementById("enrollmentMessage");
+
+        messageElement.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    function closeEnrollmentModal() {
+        var modal = document.getElementById("enrollmentModal");
+        modal.style.display = "none";
+    }
+</script>
 <script src="<?php echo URLROOT; ?>/js/search.js"></script>

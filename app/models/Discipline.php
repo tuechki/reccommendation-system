@@ -258,6 +258,18 @@
             return false;
         }
 
+        public function unenroll($userId, $disciplineId) {
+            $this->db->query('DELETE FROM users_disciplines WHERE userId = :userId AND disciplineId = :disciplineId');
+
+            $this->db->bind(':userId', $userId);
+            $this->db->bind(':disciplineId', $disciplineId);
+
+            if($this->db->execute()){
+                return true;
+            }
+            return false;
+        }
+
         public function search($field, $searchInput){
             $this->db->query("SELECT * FROM disciplines WHERE $field LIKE '%$searchInput%'");
             

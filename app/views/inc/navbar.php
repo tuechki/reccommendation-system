@@ -9,7 +9,8 @@
             <?php endif; ?>
             <?php if($_SESSION['user_role'] == 'admin') : ?>
                 <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/import" class="btn">Добави дисциплини</a>
-            <?php endif; ?> 
+                <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/stats" class="btn">Статистики</a>
+        <?php endif; ?>
         
         <div class="right">
             <p>Здравей, <?php echo $_SESSION['user_name']; ?>!</p>

@@ -42,23 +42,6 @@
                }
 
              } else {
-              if(sizeof($disciplines) == 0){
-                $data = [
-                  'searchedField' => $displaySearchedField,
-                  'searchedValue' => $searchInput,
-                  'no_results_message' => 'Няма намерени резултати за това търсене.',
-                  'disciplines' => '',
-                ];
-              } else{
-                $data = [
-                  'searchedField' => $displaySearchedField,
-                  'searchedValue' => $searchInput,
-                  'no_results_message' => '',
-                  'disciplines' => $disciplines,
-                ];
-              }
-             
-            } else {
               /* Normal disciplines index behaviour - display all disciplines */
               $disciplines = $this->disciplineModel->getDisciplines();
               $enrolledDisciplinesIds = [];

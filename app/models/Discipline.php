@@ -345,6 +345,22 @@
             return $results;
         }
 
+        public function getUsersByDisciplinesData() {
+            $this->db->query("SELECT u.name, count(ud.disciplineId) as `count` from users u JOIN users_disciplines ud ON u.id = ud.userId GROUP BY u.name;");
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function getDisciplinesByUsersData() {
+            $this->db->query("SELECT d.disciplineNameBg, count(ud.userId) as `count` from disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId GROUP BY d.disciplineNameBg;");
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
         public function getLastInserted(){
             $id = $this->db->getLastInsertedId();
             return $id;

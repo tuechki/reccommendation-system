@@ -805,7 +805,7 @@
             if(!empty($dependsOnDisciplines)){
               $display = $display . "<div class=\"dependancyTable\">" .
               "<div class=\"tableTitle\">" .
-                "<h4>Дисциплината зависи от:</h4>" .
+                "<h4 id=\"dependsOnHeading\">Дисциплината зависи от:</h4>" .
                 "</div>" .
               "<table>" .
                 "<tr>" .
@@ -827,7 +827,7 @@
             if(!empty($dependByThisDiscipline)){
               $display = $display . "<div class=\"dependancyTable\">" .
               "<div class=\"tableTitle\">" .
-                "<h4>От тази дисциплина зависят:</h4>" .
+                "<h4 id=\"dependByHeading\">От тази дисциплина зависят:</h4>" .
                 "</div>" .
               "<table>" .
                 "<tr>" .
@@ -883,6 +883,18 @@
               echo "Нямате достъп до този режим на преглед! Влезте в системата или се регистрирайте, за да видите повече за тази дисциплина.";
             }
           }
+
+        public function stats(){
+            $usersByDisciplinesData = $this->disciplineModel->getUsersByDisciplinesData();
+            $disciplinesByUsersData = $this->disciplineModel->getDisciplinesByUsersData();
+
+            $data = [
+                'usersByDisciplinesData' => $usersByDisciplinesData,
+                'disciplinesByUsersData' => $disciplinesByUsersData,
+            ];
+
+            $this->view('disciplines/stats', $data);
+        }
           
           public function admin($id){
             ob_clean();

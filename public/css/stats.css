@@ -1,0 +1,17 @@
+#statisticsCharts {
+    display: flex;
+    justify-content: space-around;
+}
+
+.chart-container {
+    text-align: center;
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px; /* Add border-radius for a rounded appearance */
+    padding: 10px;
+}
+
+.chart-container canvas {
+    width: 650px;
+    height: 650px;
+}

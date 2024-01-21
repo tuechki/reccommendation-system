@@ -36,7 +36,7 @@
 
         public function getDisciplinesByUserId($id)
         {
-            $this->db->query("SELECT * from disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = :id");
+            $this->db->query("SELECT d.* from disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = :id");
             $this->db->bind(':id', $id);
 
             $results = $this->db->resultSet();
@@ -303,6 +303,36 @@
 
             foreach ($fieldsValues as $key => $value) {
                 $this->db->bind($key + 1, $value);
+            }
+
+            $this->db->execute();
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function searchDisciplinesByUserId($searchCriteria, $userId) {
+            $whereConditions = [];
+            $fieldsValues = [];
+
+            foreach ($searchCriteria as $field => $value) {
+                if (!empty($value)) {
+                    $whereConditions[] = is_numeric($value) ? "$field = ?" : "$field LIKE ?";
+                    $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                }
+            }
+
+            $whereClause = implode(' AND ', $whereConditions);
+            $query = "SELECT d.* FROM disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = ?";
+
+            if (!empty($whereConditions)) {
+                $query .= " AND $whereClause";
+            }
+            $this->db->query($query);
+
+            $this->db->bind(1, $userId);
+            foreach ($fieldsValues as $key => $value) {
+                $this->db->bind($key + 2, $value);
             }
 
             $this->db->execute();

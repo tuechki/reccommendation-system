@@ -57,57 +57,41 @@
          }
 
          public function enrolled(){
+             if (!isset($_SESSION['user_id'])) {
+                 header("Location: " . URLROOT . "/disciplines/index");
+                 exit();
+             }
 
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                 $jsonFields = urldecode($_POST['jsonFields']);
+                 $cleanedJson = $this->clean_json_string($jsonFields);
+                 $fields = json_decode($cleanedJson, true);
 
-                $field=($_POST['field']);
-                $searchInput=($_POST['searchInput']);
+                 $userId = $_SESSION['user_id'];
+                 $disciplines = $this->disciplineModel->searchDisciplinesByUserId($fields, $userId);
 
-                $disciplines = $this->disciplineModel->search($field, $searchInput);
+                 $enrolledDisciplinesIds = [];
+                 if (isset($_SESSION['user_id'])) {
+                     $userId = $_SESSION['user_id'];
+                     $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+                 }
 
-                $displaySearchedField;
-                switch($field) {
-                    case "disciplineNameBg":
-                        $displaySearchedField = "Име";
-                        break;
-                    case "disciplineNameEng":
-                        $displaySearchedField = "English Name";
-                        break;
-                    case "credits":
-                        $displaySearchedField = "Кредити";
-                        break;
-                    case "category":
-                        $displaySearchedField = "Категория";
-                        break;
-                    case "semester":
-                        $displaySearchedField = "Семестър";
-                        break;
-                    case "professor":
-                        $displaySearchedField = "Преподавател";
-                        break;
-                    case "elective":
-                        $displaySearchedField = "Статут";
-                        break;
-                }
+                 if(sizeof($disciplines) == 0){
+                     $data = [
+                         'no_results_message' => 'Няма намерени резултати за това търсене.',
+                         'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+                         'disciplines' => '',
+                     ];
+                 } else{
+                     $data = [
+                         'no_results_message' => '',
+                         'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+                         'disciplines' => $disciplines,
+                     ];
+                 }
 
-                if(sizeof($disciplines) == 0){
-                    $data = [
-                        'searchedField' => $displaySearchedField,
-                        'searchedValue' => $searchInput,
-                        'no_results_message' => 'Няма намерени резултати за това търсене.',
-                        'disciplines' => '',
-                    ];
-                } else{
-                    $data = [
-                        'searchedField' => $displaySearchedField,
-                        'searchedValue' => $searchInput,
-                        'no_results_message' => '',
-                        'disciplines' => $disciplines,
-                    ];
-                }
-
-            } else {
+             } else {
                 /* Normal disciplines index behaviour - display all disciplines */
                 $disciplines = [];
                 if (isset($_SESSION['user_id'])) {

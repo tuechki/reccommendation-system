@@ -56,7 +56,7 @@
                   $userId = $_SESSION['user_id'];
                   $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
               }
-              
+
                  $data = [
                      'disciplines' => $disciplines,
                      'enrolledDisciplinesIds' => $enrolledDisciplinesIds,

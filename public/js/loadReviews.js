@@ -54,15 +54,20 @@
         var disciplinesChartContainer = document.getElementById("dependencyChartContainer");
         disciplinesChartContainer.style.height = 600 + "px";
 
+        // Set styles for the container
+        disciplinesChartContainer.style.display = 'flex';
+        disciplinesChartContainer.style.justifyContent = 'center';
+        disciplinesChartContainer.style.alignItems = 'center';
+        disciplinesChartContainer.style.height = '50vh'; // Optional: Set a specific height for the container
+
+        // Set styles for the canvas
+
         var canvas = document.createElement("canvas");
         canvas.id = "dependencyChart";
         canvas.width = 400;
         canvas.height = 400;
-        console.log('canvas created');
+
         disciplinesChartContainer.appendChild(canvas);
-
-        console.log('canvas appended');
-
 
         var dependenciesChartDataJson = document.getElementById("dependenciesChartData");
         console.log(dependenciesChartDataJson.value);
@@ -81,6 +86,17 @@
                     data: data,
                     backgroundColor: backgroundColor
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
             }
         });
     });

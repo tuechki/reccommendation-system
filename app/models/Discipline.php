@@ -288,16 +288,33 @@
         public function searchDisciplines($searchCriteria) {
             $whereConditions = [];
             $fieldsValues = [];
+            $query = "SELECT * FROM `disciplines` d";
+
+            if ($searchCriteria['rec'] === 'on') {
+                $query = "SELECT * FROM disciplines d JOIN users_details ud ON d.specialtiesAndCourses LIKE CONCAT('%', ud.specialtiesAndCourses, '%') ";
+            }
 
             foreach ($searchCriteria as $field => $value) {
-                if (!empty($value)) {
-                    $whereConditions[] = is_numeric($value) ? "$field = ?" : "$field LIKE ?";
-                    $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                if (!empty($value) && $field !== 'rec' && $field !== 'recommended') {
+                    if ($field === 'userId') {
+                        if ($searchCriteria['rec'] === 'on') {
+                            $whereConditions[] = is_numeric($value) ? "ud.$field = ?" : "ud.$field LIKE ?";
+                            $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                        }
+                    } else if ($field === 'keyword' && $value !== '') {
+                        $whereConditions[] = "(d.disciplineNameBg LIKE ? OR d.disciplineNameEng LIKE ? OR d.specialtiesAndCourses LIKE ? OR d.category LIKE ? OR d.oks LIKE ? OR d.professor LIKE ? OR d.semester LIKE ? OR d.elective LIKE ? OR d.annotation LIKE ? OR d.prerequisites LIKE ? OR d.expectations LIKE ? OR d.content LIKE ? OR d.bibliography LIKE ? OR d.code LIKE ?)";
+
+                        for ($i = 1; $i <= 14; $i++) {
+                            $fieldsValues[] = is_numeric($value) ? "%$value%" : "%$value%";
+                        }
+                    } else {
+                        $whereConditions[] = is_numeric($value) ? "d.$field = ?" : "d.$field LIKE ?";
+                        $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                    }
                 }
             }
 
             $whereClause = implode(' AND ', $whereConditions);
-            $query = "SELECT * FROM `disciplines`";
 
             if (!empty($whereConditions)) {
                 $query .= " WHERE $whereClause";

@@ -25,6 +25,35 @@
             return $row;
         }
 
+        public function getUsersByDisciplineId($id){
+            $this->db->query("SELECT * FROM usersDisciplines WHERE disciplineId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function getDisciplinesByUserId($id)
+        {
+            $this->db->query("SELECT d.* from disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function getDisciplinesIdsByUserId($id)
+        {
+            $this->db->query("SELECT disciplineId FROM users_disciplines WHERE userId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
         public function addDiscipline($data){
                 $this->db->query("INSERT INTO disciplines (
                 disciplineNameBg
@@ -217,6 +246,30 @@
             return $results;
         }
 
+        public function enroll($userId, $disciplineId) {
+            $this->db->query('INSERT INTO users_disciplines (userId, disciplineId) VALUES (:userId, :disciplineId)');
+
+            $this->db->bind(':userId', $userId);
+            $this->db->bind(':disciplineId', $disciplineId);
+
+            if($this->db->execute()){
+                return true;
+            }
+            return false;
+        }
+
+        public function unenroll($userId, $disciplineId) {
+            $this->db->query('DELETE FROM users_disciplines WHERE userId = :userId AND disciplineId = :disciplineId');
+
+            $this->db->bind(':userId', $userId);
+            $this->db->bind(':disciplineId', $disciplineId);
+
+            if($this->db->execute()){
+                return true;
+            }
+            return false;
+        }
+
         public function search($field, $searchInput){
             $this->db->query("SELECT * FROM disciplines WHERE $field LIKE '%$searchInput%'");
             
@@ -250,6 +303,36 @@
 
             foreach ($fieldsValues as $key => $value) {
                 $this->db->bind($key + 1, $value);
+            }
+
+            $this->db->execute();
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function searchDisciplinesByUserId($searchCriteria, $userId) {
+            $whereConditions = [];
+            $fieldsValues = [];
+
+            foreach ($searchCriteria as $field => $value) {
+                if (!empty($value)) {
+                    $whereConditions[] = is_numeric($value) ? "$field = ?" : "$field LIKE ?";
+                    $fieldsValues[] = is_numeric($value) ? $value : "%$value%";
+                }
+            }
+
+            $whereClause = implode(' AND ', $whereConditions);
+            $query = "SELECT d.* FROM disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = ?";
+
+            if (!empty($whereConditions)) {
+                $query .= " AND $whereClause";
+            }
+            $this->db->query($query);
+
+            $this->db->bind(1, $userId);
+            foreach ($fieldsValues as $key => $value) {
+                $this->db->bind($key + 2, $value);
             }
 
             $this->db->execute();

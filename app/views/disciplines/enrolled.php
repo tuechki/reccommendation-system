@@ -19,7 +19,7 @@ $fields = [
         </div>
 
         <div id="searchDiv">
-            <form id="disciplinesSearchForm" action="<?php echo URLROOT; ?>/disciplines/index" method="post">
+            <form id="disciplinesSearchForm" action="<?php echo URLROOT; ?>/disciplines/enrolled" method="post">
                 <?php
                 $counter = 0;
                 foreach ($fields as $field => $label):
@@ -132,11 +132,11 @@ $fields = [
     </div>
 </div>
 
-    <?php if($data['no_results_message']){?>
-            <div id="noResults">
-            <p><?php echo $data['no_results_message']; ?></p>
-            </div>
-    <?php } else {?>
+<?php if($data['no_results_message']){?>
+    <div id="noResults">
+        <p><?php echo $data['no_results_message']; ?></p>
+    </div>
+<?php } else {?>
         <div class="curriculumList">
             <?php
             foreach($data['disciplines'] as $discipline) :
@@ -144,24 +144,12 @@ $fields = [
                 <div class="discipline-container curriculumRow">
                     <a class="commonLink" href="<?php echo URLROOT . "/disciplines/visualise/" . $discipline->id;?>"><?php echo $discipline->disciplineNameBg;?></a>
                     <?php if(isset($_SESSION['user_id'])) : ?>
-                        <form action="<?php echo URLROOT . "/disciplines/enroll/" ?>" method="POST">
+                        <form action="<?php echo URLROOT . "/disciplines/unenroll/" ?>" method="POST">
                             <input type="hidden" name="disciplineId" value="<?php echo $discipline->id; ?>">
                             <input type="hidden" name="userId" value="<?php echo $_SESSION['user_id']; ?>">
-                            <div class="enroll-button-container">
-                                <?php
-                                $isEnrolled = false;
-                                foreach ($data['enrolledDisciplinesIds'] as $enrolledDiscipline) {
-                                    if ($enrolledDiscipline->disciplineId == $discipline->id) {
-                                        $isEnrolled = true;
-                                        break;
-                                    }
-                                }
-                                $buttonClass = $isEnrolled ? 'enroll-button-disabled' : 'enroll-button';
-                                $buttonText = $isEnrolled ? 'Записан' : 'Запиши';
-                                ?>
-
-                                <button name="enroll_button" class="<?php echo $buttonClass; ?>" <?php echo $isEnrolled ? 'disabled' : ''; ?>>
-                                    <?php echo $buttonText; ?>
+                            <div class="unenroll-button-container">
+                                <button name="unenroll_button" class="unenroll-button">
+                                    Отпиши
                                 </button>
                             </div>
                         </form>
@@ -170,7 +158,65 @@ $fields = [
             <?php endforeach; ?>
         </div>
         <?php
-    } ?>
+        $enrollmentMessage = $data['enrollmentMessage'];
+        $unenrollmentMessage = $data['unenrollmentMessage'];
+        ?>
+        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" id="unenrollmentMessageHidden" value="<?php echo htmlspecialchars($unenrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
+    <?php } ?>
+</div>
+
+<div id="enrollmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeЕnrollmentModal()">&times;</span>
+        <p id="enrollmentMessage"></p>
+    </div>
+</div>
+
+<div id="unenrollmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeUnenrollmentModal()">&times;</span>
+        <p id="unenrollmentMessage"></p>
+    </div>
 </div>
 </body>
+<script type="text/javascript">
+    // Retrieve and display the enrollment status message
+    var enrollmentMessage = document.getElementById("enrollmentMessageHidden").value;
+    if (enrollmentMessage != "") {
+        openЕnrollmentModal(enrollmentMessage);
+    }
+
+    function openЕnrollmentModal(message) {
+        var modal = document.getElementById("enrollmentModal");
+        var messageElement = document.getElementById("enrollmentMessage");
+
+        messageElement.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    function closeЕnrollmentModal() {
+        var modal = document.getElementById("enrollmentModal");
+        modal.style.display = "none";
+    }
+
+    // Retrieve and display the enrollment status message
+    var unenrollmentMessage = document.getElementById("unenrollmentMessageHidden").value;
+    if (unenrollmentMessage != "") {
+        openUnenrollmentModal(unenrollmentMessage);
+    }
+
+    function openUnenrollmentModal(message) {
+        var modal = document.getElementById("unenrollmentModal");
+        var messageElement = document.getElementById("unenrollmentMessage");
+
+        messageElement.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    function closeUnenrollmentModal() {
+        var modal = document.getElementById("unenrollmentModal");
+        modal.style.display = "none";
+    }
+</script>
 <script src="<?php echo URLROOT; ?>/js/search.js"></script>

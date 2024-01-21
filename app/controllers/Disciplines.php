@@ -19,27 +19,113 @@
 
                $disciplines = $this->disciplineModel->searchDisciplines($fields);
 
+               $enrolledDisciplinesIds = [];
+               if (isset($_SESSION['user_id'])) {
+                   $userId = $_SESSION['user_id'];
+                   $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+               }
+
                if(sizeof($disciplines) == 0){
                  $data = [
                    'no_results_message' => 'Няма намерени резултати за това търсене.',
+                   'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => '',
                  ];
                } else{
                  $data = [
                    'no_results_message' => '',
+                   'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => $disciplines,
                  ];
                }
 
              } else {
-               $disciplines = $this->disciplineModel->getDisciplines();
-               $data = [
-                   'disciplines' => $disciplines,
-               ];
+              /* Normal disciplines index behaviour - display all disciplines */
+              $disciplines = $this->disciplineModel->getDisciplines();
+              $enrolledDisciplinesIds = [];
+              if (isset($_SESSION['user_id'])) {
+                  $userId = $_SESSION['user_id'];
+                  $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+              }
+
+             $data = [
+                 'disciplines' => $disciplines,
+                 'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+             ];
              }
-               $this->view('disciplines/index', $data);
+             $this->view('disciplines/index', $data);
          }
 
+         public function enrolled(){
+             if (!isset($_SESSION['user_id'])) {
+                 header("Location: " . URLROOT . "/disciplines/index");
+                 exit();
+             }
+
+             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                 $jsonFields = urldecode($_POST['jsonFields']);
+                 $cleanedJson = $this->clean_json_string($jsonFields);
+                 $fields = json_decode($cleanedJson, true);
+
+                 $userId = $_SESSION['user_id'];
+                 $disciplines = $this->disciplineModel->searchDisciplinesByUserId($fields, $userId);
+
+                 $enrolledDisciplinesIds = [];
+                 if (isset($_SESSION['user_id'])) {
+                     $userId = $_SESSION['user_id'];
+                     $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+                 }
+
+                 if(sizeof($disciplines) == 0){
+                     $data = [
+                         'no_results_message' => 'Няма намерени резултати за това търсене.',
+                         'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+                         'disciplines' => '',
+                     ];
+                 } else{
+                     $data = [
+                         'no_results_message' => '',
+                         'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+                         'disciplines' => $disciplines,
+                     ];
+                 }
+
+             } else {
+                /* Normal disciplines index behaviour - display all disciplines */
+                $disciplines = [];
+                if (isset($_SESSION['user_id'])) {
+                    // Get the user ID from the session
+                    $userId = $_SESSION['user_id'];
+                    $disciplines = $this->disciplineModel->getDisciplinesByUserId($userId);
+                }
+
+                $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
+                $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
+                $enrollmentMessage = "";
+                if ($enrollmentSuccess) {
+                    $enrollmentMessage = "Дисциплината е записана успешно!";
+                } else if ($enrollmentHappened) {
+                    $enrollmentMessage = "Записването е неуспешно. Моля опитайте отново!";
+                }
+
+                $unenrollmentHappened = isset($_GET['unenrollmentSuccessful']);
+                $unenrollmentSuccess = $unenrollmentHappened && $_GET['unenrollmentSuccessful'] === 'true';
+                $unenrollmentMessage = "";
+                if ($unenrollmentSuccess) {
+                    $unenrollmentMessage = "Дисциплината е отписана успешно!";
+                } else if ($unenrollmentHappened) {
+                    $unenrollmentMessage = "Отписването е неуспешно. Моля опитайте отново!";
+                }
+
+                $data = [
+                    'disciplines' => $disciplines,
+                    'enrollmentMessage' => $enrollmentMessage,
+                    'unenrollmentMessage' => $unenrollmentMessage,
+                ];
+            }
+            $this->view('disciplines/enrolled', $data);
+        }
 
         public function import()
         {
@@ -48,7 +134,6 @@
 
                 try {
                     $this->disciplineModel->getDatabase()->beginTransaction();
-
                     foreach ($jsonArray as $json) {
                         $disciplineNameBg = $json['Дисциплина'];
                         $disciplineNameEng = $json['Discipline'];
@@ -473,6 +558,53 @@
                   $this->view('disciplines/edit', $data);
             }
           }
+
+        public function enroll(){
+
+            /* Searching functionality for discipline is included in index view and method. */
+            /* If a search query was sent, show only query results in index. */
+
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: " . URLROOT . "/disciplines/index");
+                exit();
+            }
+
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["enroll_button"])) {
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+                $userId = ($_POST['userId']);
+                $disciplineId = ($_POST['disciplineId']);
+
+                $enrollmentSuccessful = $this->disciplineModel->enroll($userId, $disciplineId);
+                $enrollmentSuccessfulString = var_export($enrollmentSuccessful, true);
+
+                header("Location: " . URLROOT . "/disciplines/enrolled?enrollmentSuccessful=" . $enrollmentSuccessfulString);
+                exit();
+            }
+        }
+
+        public function unenroll(){
+
+            /* Searching functionality for discipline is included in index view and method. */
+            /* If a search query was sent, show only query results in index. */
+
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: " . URLROOT . "/disciplines/enrolled");
+                exit();
+            }
+
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["unenroll_button"])) {
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                $userId = ($_POST['userId']);
+                $disciplineId = ($_POST['disciplineId']);
+
+                $unenrollmentSuccessful = $this->disciplineModel->unenroll($userId, $disciplineId);
+                $unenrollmentSuccessfulString = var_export($unenrollmentSuccessful, true);
+
+                header("Location: " . URLROOT . "/disciplines/enrolled?unenrollmentSuccessful=" . $unenrollmentSuccessfulString);
+                exit();
+            }
+        }
           
           private function getFile($id){
             $json_data = file_get_contents(URLROOT . "/public/JSONS/file" . $id . ".json");

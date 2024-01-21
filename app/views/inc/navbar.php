@@ -4,6 +4,7 @@
         
             <a class="nav-link" href="<?php echo URLROOT; ?>/curriculums/index">Учебни планове</a>
             <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/index">Дисциплини</a>
+            <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/enrolled">Записани дисциплини</a>
             <?php if($_SESSION['user_role'] == 'admin') : ?>
                 <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/import" class="btn">Добави дисциплини</a>
             <?php endif; ?> 

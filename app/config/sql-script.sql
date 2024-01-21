@@ -37,6 +37,11 @@ ALTER TABLE `depends_on` ADD UNIQUE( `disciplineId`, `code`);
 
 ALTER TABLE `depend_by` ADD UNIQUE( `disciplineId`, `code`); 
 
+CREATE TABLE `users_disciplines` (`userId` INT NOT NULL, `disciplineId` INT NOT NULL,
+                                  Constraint PK_users_disciplines Primary Key (userId, disciplineId),
+                                  CONSTRAINT FK_userid_id FOREIGN KEY (userId) REFERENCES Users(id),
+                                  CONSTRAINT FK_disciplineid_id FOREIGN KEY (disciplineId) REFERENCES Disciplines(id));
+
 /*
 	Insert sample data - the info of three disciplines and several curriculums (bachelors and masters).
 */

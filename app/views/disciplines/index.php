@@ -171,9 +171,8 @@ $fields = [
         </div>
         <?php
         $enrollmentMessage = $data['enrollmentMessage'];
-        ?>
-        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
-    <?php } ?>
+    } ?>
+    <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
 </div>
 <div id="enrollmentModal" class="modal">
     <div class="modal-content">

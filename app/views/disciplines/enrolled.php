@@ -60,11 +60,21 @@
             <?php endforeach; ?>
         </div>
         <?php
+        $enrollmentMessage = $data['enrollmentMessage'];
         $unenrollmentMessage = $data['unenrollmentMessage'];
         ?>
+        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" id="unenrollmentMessageHidden" value="<?php echo htmlspecialchars($unenrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
     <?php } ?>
 </div>
+
+<div id="enrollmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeЕnrollmentModal()">&times;</span>
+        <p id="enrollmentMessage"></p>
+    </div>
+</div>
+
 <div id="unenrollmentModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeUnenrollmentModal()">&times;</span>
@@ -74,8 +84,26 @@
 </body>
 <script type="text/javascript">
     // Retrieve and display the enrollment status message
+    var enrollmentMessage = document.getElementById("enrollmentMessageHidden").value;
+    if (enrollmentMessage != "") {
+        openЕnrollmentModal(enrollmentMessage);
+    }
+
+    function openЕnrollmentModal(message) {
+        var modal = document.getElementById("enrollmentModal");
+        var messageElement = document.getElementById("enrollmentMessage");
+
+        messageElement.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    function closeЕnrollmentModal() {
+        var modal = document.getElementById("enrollmentModal");
+        modal.style.display = "none";
+    }
+
+    // Retrieve and display the enrollment status message
     var unenrollmentMessage = document.getElementById("unenrollmentMessageHidden").value;
-    console.log(unenrollmentMessage);
     if (unenrollmentMessage != "") {
         openUnenrollmentModal(unenrollmentMessage);
     }

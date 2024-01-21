@@ -170,35 +170,7 @@ $fields = [
             <?php endforeach; ?>
         </div>
         <?php
-        $enrollmentMessage = $data['enrollmentMessage'];
     } ?>
-    <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
-</div>
-<div id="enrollmentModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeEnrollmentModal()">&times;</span>
-        <p id="enrollmentMessage"></p>
-    </div>
 </div>
 </body>
-<script type="text/javascript">
-    // Retrieve and display the enrollment status message
-    var enrollmentMessage = document.getElementById("enrollmentMessageHidden").value;
-    if (enrollmentMessage != "") {
-        openEnrollmentModal(enrollmentMessage);
-    }
-
-    function openEnrollmentModal(message) {
-        var modal = document.getElementById("enrollmentModal");
-        var messageElement = document.getElementById("enrollmentMessage");
-
-        messageElement.innerHTML = message;
-        modal.style.display = "block";
-    }
-
-    function closeEnrollmentModal() {
-        var modal = document.getElementById("enrollmentModal");
-        modal.style.display = "none";
-    }
-</script>
 <script src="<?php echo URLROOT; ?>/js/search.js"></script>

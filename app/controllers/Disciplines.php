@@ -30,14 +30,12 @@
                    'no_results_message' => 'Няма намерени резултати за това търсене.',
                    'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => '',
-                   'enrollmentMessage' => '',
                  ];
                } else{
                  $data = [
                    'no_results_message' => '',
                    'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => $disciplines,
-                   'enrollmentMessage' => '',
                  ];
                }
 
@@ -50,20 +48,10 @@
                   $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
               }
 
-                 $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
-                 $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
-                 $enrollmentMessage = "";
-                 if ($enrollmentSuccess) {
-                     $enrollmentMessage = "Дисциплината е отписана успешно!";
-                 } else if ($enrollmentHappened) {
-                     $enrollmentMessage = "Отписването е неуспешно. Моля опитайте отново!";
-                 }
-
-                 $data = [
-                     'disciplines' => $disciplines,
-                     'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
-                     'enrollmentMessage' => $enrollmentMessage
-                 ];
+             $data = [
+                 'disciplines' => $disciplines,
+                 'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
+             ];
              }
              $this->view('disciplines/index', $data);
          }
@@ -128,6 +116,15 @@
                     $disciplines = $this->disciplineModel->getDisciplinesByUserId($userId);
                 }
 
+                $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
+                $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
+                $enrollmentMessage = "";
+                if ($enrollmentSuccess) {
+                    $enrollmentMessage = "Дисциплината е записана успешно!";
+                } else if ($enrollmentHappened) {
+                    $enrollmentMessage = "Записването е неуспешно. Моля опитайте отново!";
+                }
+
                 $unenrollmentHappened = isset($_GET['unenrollmentSuccessful']);
                 $unenrollmentSuccess = $unenrollmentHappened && $_GET['unenrollmentSuccessful'] === 'true';
                 $unenrollmentMessage = "";
@@ -139,7 +136,8 @@
 
                 $data = [
                     'disciplines' => $disciplines,
-                    'unenrollmentMessage' => $unenrollmentMessage
+                    'enrollmentMessage' => $enrollmentMessage,
+                    'unenrollmentMessage' => $unenrollmentMessage,
                 ];
             }
             $this->view('disciplines/enrolled', $data);
@@ -596,7 +594,7 @@
                 $enrollmentSuccessful = $this->disciplineModel->enroll($userId, $disciplineId);
                 $enrollmentSuccessfulString = var_export($enrollmentSuccessful, true);
 
-                header("Location: " . URLROOT . "/disciplines/index?enrollmentSuccessful=" . $enrollmentSuccessfulString);
+                header("Location: " . URLROOT . "/disciplines/enrolled?enrollmentSuccessful=" . $enrollmentSuccessfulString);
                 exit();
             }
         }

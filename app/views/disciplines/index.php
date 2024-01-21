@@ -132,20 +132,6 @@ $fields = [
     </div>
 </div>
 
-<?php if($data['no_results_message']){?>
-    <div id="noResults">
-        <p><?php echo $data['no_results_message']; ?></p>
-    </div>
-<?php } else {?>
-    <div class="curriculumList">
-        <?php foreach($data['disciplines'] as $discipline) : ?>
-            <a class="commonLink" href="<?php echo URLROOT . "/disciplines/visualise/" . $discipline->id;?>">
-                <div class="curriculumRow"><?php echo $discipline->disciplineNameBg;?></div>
-            </a>
-        <?php endforeach; ?>
-    </div>
-<?php } ?>
-
     <?php if($data['no_results_message']){?>
             <div id="noResults">
             <p><?php echo $data['no_results_message']; ?></p>

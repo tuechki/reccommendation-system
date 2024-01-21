@@ -179,14 +179,14 @@ $fields = [
                                 </button>
                             </div>
                         </form>
-                        <?php
-                        $enrollmentMessage = $data['enrollmentMessage'];
-                        ?>
-                        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
+        <?php
+        $enrollmentMessage = $data['enrollmentMessage'];
+        ?>
+        <input type="hidden" id="enrollmentMessageHidden" value="<?php echo htmlspecialchars($enrollmentMessage, ENT_QUOTES, 'UTF-8'); ?>">
     <?php } ?>
 </div>
 <div id="enrollmentModal" class="modal">

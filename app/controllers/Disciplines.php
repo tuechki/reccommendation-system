@@ -580,6 +580,11 @@
             /* Searching functionality for discipline is included in index view and method. */
             /* If a search query was sent, show only query results in index. */
 
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: " . URLROOT . "/disciplines/index");
+                exit();
+            }
+
             if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["enroll_button"])) {
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 

@@ -32,6 +32,18 @@
       }
     }
 
+    public function beginTransaction() {
+          return $this->connection->beginTransaction();
+    }
+
+    public function commit() {
+          return $this->connection->commit();
+    }
+
+    public function rollBack() {
+          return $this->connection->rollBack();
+    }
+
     // Prepare statement with query
     public function query($sql){
       $this->stmt = $this->connection->prepare($sql);

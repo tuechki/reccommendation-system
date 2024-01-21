@@ -8,6 +8,7 @@
             
             $this->disciplineModel = $this->model('Discipline');
             $this->curriculumModel = $this->model('Curriculum');
+            $this->userModel = $this->model('User');
         }
 
          public function index(){
@@ -805,7 +806,7 @@
             if(!empty($dependsOnDisciplines)){
               $display = $display . "<div class=\"dependancyTable\">" .
               "<div class=\"tableTitle\">" .
-                "<h4>Дисциплината зависи от:</h4>" .
+                "<h4 id=\"dependsOnHeading\">Дисциплината зависи от:</h4>" .
                 "</div>" .
               "<table>" .
                 "<tr>" .
@@ -827,7 +828,7 @@
             if(!empty($dependByThisDiscipline)){
               $display = $display . "<div class=\"dependancyTable\">" .
               "<div class=\"tableTitle\">" .
-                "<h4>От тази дисциплина зависят:</h4>" .
+                "<h4 id=\"dependByHeading\">От тази дисциплина зависят:</h4>" .
                 "</div>" .
               "<table>" .
                 "<tr>" .
@@ -883,6 +884,18 @@
               echo "Нямате достъп до този режим на преглед! Влезте в системата или се регистрирайте, за да видите повече за тази дисциплина.";
             }
           }
+
+        public function stats(){
+            $usersByDisciplinesData = $this->disciplineModel->getUsersByDisciplinesData();
+            $disciplinesByUsersData = $this->disciplineModel->getDisciplinesByUsersData();
+
+            $data = [
+                'usersByDisciplinesData' => $usersByDisciplinesData,
+                'disciplinesByUsersData' => $disciplinesByUsersData,
+            ];
+
+            $this->view('disciplines/stats', $data);
+        }
           
           public function admin($id){
             ob_clean();
@@ -934,6 +947,41 @@
 
                 readfile($file);
           }
+        }
+
+        public function export(){
+             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                 $exportType = $_POST['export_type'];
+
+                 if ($exportType == 'disciplinesByUsers') {
+                     $disciplinesByUsers = [];
+
+                     $users = $this->userModel->getUsers();
+                     foreach ($users as $user) {
+                         $id = $user->id;
+                         $email = $user->email;
+
+                         // Assuming $this->disciplineModel->getDisciplinesByUserId($userId) returns an array of disciplines
+                         $disciplines = $this->disciplineModel->getDisciplinesByUserId($id);
+
+                         $disciplinesByUsers[$email] = $disciplines;
+                     }
+
+                     $jsonData = json_encode($disciplinesByUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+                     header('Content-Type: application/json');
+                     header('Content-Disposition: attachment; filename="disciplines_by_users.json"');
+
+                     ob_clean();
+                     flush();
+
+                     echo $jsonData;
+                 } else {
+                     $this->view('disciplines/export');
+                 }
+             } else {
+                 $this->view('disciplines/export');
+             }
         }
 
         public function downloadHTML($id){

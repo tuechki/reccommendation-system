@@ -14,7 +14,7 @@
 
 <form id="importJson" method="POST" action="<?php echo URLROOT . "/disciplines/edit/" .  $data['id'];?>">
     <div id="formBody">
-        <label for="mainInfo"> JSON файл: </label> 
+        <label for="mainInfo"> Променете стойността в желаните полета: </label>
         <textarea name="mainInfo" class="<?php echo (!empty($data['mainInfo_err'])) ? 'is_invalid' : '';?>" value="<?php echo $data['mainInfo'];?>">
             <?php echo file_get_contents($path); ?>
         </textarea>

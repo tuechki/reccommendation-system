@@ -95,6 +95,30 @@
       }
     }
 
+    public function profile() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $jsonFields = urldecode($_POST['jsonFields']);
+            $cleanedJson = $this->clean_json_string($jsonFields);
+
+            $fields = json_decode($cleanedJson, true);
+
+            $this->userModel->updateUserProfile($fields);
+
+            $userProfile = $this->userModel->getUserProfileById($_SESSION['user_id']);
+            $data = [
+                'userProfile' => $userProfile
+            ];
+            $this->view('users/profile', $data);
+        }
+
+        $userProfile = $this->userModel->getUserProfileById($_SESSION['user_id']);
+        $data = [
+            'userProfile' => $userProfile
+        ];
+        $this->view('users/profile', $data);
+    }
+
     public function login(){
       // Check for POST
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -175,5 +199,13 @@
       unset($_SESSION['user_role']);
       session_destroy();
       redirect('users/login');
+    }
+
+    private function clean_json_string($jsonString) {
+      $jsonString = preg_replace('/^\xEF\xBB\xBF/', '', $jsonString);
+      $jsonString = preg_replace('/[[:cntrl:]&&:space:]]/', '', $jsonString);
+      $jsonString = trim($jsonString);
+
+      return $jsonString;
     }
   }

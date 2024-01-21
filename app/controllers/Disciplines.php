@@ -606,7 +606,6 @@
             /* Searching functionality for discipline is included in index view and method. */
             /* If a search query was sent, show only query results in index. */
 
-            echo 'inunenroll';
             if (!isset($_SESSION['user_id'])) {
                 header("Location: " . URLROOT . "/disciplines/enrolled");
                 exit();

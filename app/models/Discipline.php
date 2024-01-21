@@ -8,6 +8,10 @@
             $this->db = new Database();
         }
 
+        public function getDatabase() {
+            return $this->db;
+        }
+
         public function getDisciplines(){
             $this->db->query("SELECT * FROM disciplines");
 

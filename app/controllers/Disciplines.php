@@ -598,6 +598,30 @@
                 exit();
             }
         }
+
+        public function unenroll(){
+
+            /* Searching functionality for discipline is included in index view and method. */
+            /* If a search query was sent, show only query results in index. */
+
+            echo 'inunenroll';
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: " . URLROOT . "/disciplines/enrolled");
+                exit();
+            }
+
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["unenroll_button"])) {
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                $userId = ($_POST['userId']);
+                $disciplineId = ($_POST['disciplineId']);
+
+                $unenrollmentSuccessful = $this->disciplineModel->unenroll($userId, $disciplineId);
+                $unenrollmentSuccessfulString = var_export($unenrollmentSuccessful, true);
+
+                header("Location: " . URLROOT . "/disciplines/enrolled?unenrollmentSuccessful=" . $unenrollmentSuccessfulString);
+                exit();
+            }
+        }
           
           private function getFile($id){
             $json_data = file_get_contents(URLROOT . "/public/JSONS/file" . $id . ".json");

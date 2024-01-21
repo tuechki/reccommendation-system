@@ -8,7 +8,7 @@ $fields = [
     "semester" => "Семестър    ",
     "disciplineNameBg" => "Дисциплна   ",
     "professor" => "Преподавател",
-    "code" => "Код         "
+    "keyword" => "Ключови думи    "
 ];
 ?>
 
@@ -85,12 +85,18 @@ $fields = [
                 }
                 ?>
 
+                <div class="field-container">
+                    <label for="recommended">Препоръчани:</label>
+                    <input type="checkbox" name="recommended" id="recommended" <?php echo (isset($_POST['recommended']) && $_POST['recommended'] === 'on') ? 'checked' : ''; ?>>
+                </div>
+
                 <div id="buttonDiv">
                     <input type="submit" value="Намери дисциплина">
                 </div>
 
                 <input type="hidden" name="jsonFields" id="jsonFields">
             </form>
+
 
 
             <script>
@@ -100,6 +106,9 @@ $fields = [
 
                         // Get form values and create an object
                         var formData = {};
+                        <?php if(isset($_SESSION['user_id'])) : ?>
+                        formData['userId'] = <?php echo $_SESSION['user_id'] ?>;
+                        <?php endif; ?>
                         var formElements = this.elements;
 
                         for (var i = 0; i < formElements.length; i++) {
@@ -107,16 +116,15 @@ $fields = [
 
                             // Skip buttons and other non-input elements
                             if (field.type !== 'submit' && field.name !== "jsonFields") {
-                                formData[field.name] = field.value;
-                                formData[field.name] = /^\d+$/.test(field.value) ? parseInt(field.value, 10) : field.value;
+                                if (field.type === 'checkbox') {
+                                    formData['recommended'] = [field.checked ? field.value : ''];
+                                    formData['rec'] = formData['recommended'][0];
+                                } else {
+                                    formData[field.name] = /^\d+$/.test(field.value) ? parseInt(field.value, 10) : field.value;
+                                }
                             }
-
                         }
-
-                        // Set the value of the hidden input field to the JSON representation of formData
                         document.getElementById('jsonFields').value = encodeURIComponent(JSON.stringify(formData));
-
-                        // Submit the form
                         this.submit();
                     });
                 });

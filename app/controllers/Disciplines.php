@@ -19,15 +19,25 @@
 
                $disciplines = $this->disciplineModel->searchDisciplines($fields);
 
+               $enrolledDisciplinesIds = [];
+               if (isset($_SESSION['user_id'])) {
+                   $userId = $_SESSION['user_id'];
+                   $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
+               }
+
                if(sizeof($disciplines) == 0){
                  $data = [
                    'no_results_message' => 'Няма намерени резултати за това търсене.',
+                   'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => '',
+                   'enrollmentMessage' => '',
                  ];
                } else{
                  $data = [
                    'no_results_message' => '',
+                   'enrolledDisciplinesIds' => $enrolledDisciplinesIds,
                    'disciplines' => $disciplines,
+                   'enrollmentMessage' => '',
                  ];
                }
 
@@ -56,6 +66,15 @@
                   $userId = $_SESSION['user_id'];
                   $enrolledDisciplinesIds = $this->disciplineModel->getDisciplinesIdsByUserId($userId);
               }
+
+                 $enrollmentHappened = isset($_GET['enrollmentSuccessful']);
+                 $enrollmentSuccess = $enrollmentHappened && $_GET['enrollmentSuccessful'] === 'true';
+                 $enrollmentMessage = "";
+                 if ($enrollmentSuccess) {
+                     $enrollmentMessage = "Дисциплината е отписана успешно!";
+                 } else if ($enrollmentHappened) {
+                     $enrollmentMessage = "Отписването е неуспешно. Моля опитайте отново!";
+                 }
 
                  $data = [
                      'disciplines' => $disciplines,

@@ -15,7 +15,7 @@ $fields = [
 <div class="disciplinesAllContainer">
     <div class="topContainer">
         <div class="title">
-            <h1>Дисциплини</h1>
+            <h1>Записани дисциплини</h1>
         </div>
 
         <div id="searchDiv">

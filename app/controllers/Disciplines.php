@@ -794,7 +794,7 @@
             $dependByCount = is_array($dependByThisDiscipline) ? count($dependByThisDiscipline) : 0;
 
             $dependenciesChartData = [
-                'labels' => ['Дисциплината зависи от', 'От дисциплината зsависят'],
+                'labels' => ['Дисциплината зависи от', 'От дисциплината зависят'],
                 'data'   => [$dependsOnCount, $dependByCount],
                 'backgroundColor' => ["#FF6384", "#36A2EB"]
             ];

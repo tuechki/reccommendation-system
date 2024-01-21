@@ -8,6 +8,7 @@
             
             $this->disciplineModel = $this->model('Discipline');
             $this->curriculumModel = $this->model('Curriculum');
+            $this->userModel = $this->model('User');
         }
 
          public function index(){
@@ -946,6 +947,41 @@
 
                 readfile($file);
           }
+        }
+
+        public function export(){
+             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                 $exportType = $_POST['export_type'];
+
+                 if ($exportType == 'disciplinesByUsers') {
+                     $disciplinesByUsers = [];
+
+                     $users = $this->userModel->getUsers();
+                     foreach ($users as $user) {
+                         $id = $user->id;
+                         $email = $user->email;
+
+                         // Assuming $this->disciplineModel->getDisciplinesByUserId($userId) returns an array of disciplines
+                         $disciplines = $this->disciplineModel->getDisciplinesByUserId($id);
+
+                         $disciplinesByUsers[$email] = $disciplines;
+                     }
+
+                     $jsonData = json_encode($disciplinesByUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+                     header('Content-Type: application/json');
+                     header('Content-Disposition: attachment; filename="disciplines_by_users.json"');
+
+                     ob_clean();
+                     flush();
+
+                     echo $jsonData;
+                 } else {
+                     $this->view('disciplines/export');
+                 }
+             } else {
+                 $this->view('disciplines/export');
+             }
         }
 
         public function downloadHTML($id){

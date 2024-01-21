@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/indexpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/indexpage.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/stats.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/export.css">
 
     <title><?php echo SITENAME;?></title>
 </head>

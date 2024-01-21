@@ -86,6 +86,17 @@
                     data: data,
                     backgroundColor: backgroundColor
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
             }
         });
     });

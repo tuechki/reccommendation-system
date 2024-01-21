@@ -45,6 +45,15 @@
                 display: false,
                 text: 'Брой записани дисциплини',
             },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
         },
     });
 
@@ -82,6 +91,15 @@
                 display: false,
                 text: 'Записани потребители за дисциплината',
             },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
         },
     });
 </script>

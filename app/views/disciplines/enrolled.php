@@ -143,7 +143,7 @@ $fields = [
                 ?>
                 <div class="discipline-container curriculumRow">
                     <a class="commonLink" href="<?php echo URLROOT . "/disciplines/visualise/" . $discipline->id;?>"><?php echo $discipline->disciplineNameBg;?></a>
-                    <?php if(isset($_SESSION['user_id'])) : ?>
+                    <?php if(isset($_SESSION['user_id']) && $_SESSION['user_role'] != 'admin') : ?>
                         <form action="<?php echo URLROOT . "/disciplines/unenroll/" ?>" method="POST">
                             <input type="hidden" name="disciplineId" value="<?php echo $discipline->id; ?>">
                             <input type="hidden" name="userId" value="<?php echo $_SESSION['user_id']; ?>">

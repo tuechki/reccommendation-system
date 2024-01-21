@@ -36,7 +36,7 @@
 
         public function getDisciplinesByUserId($id)
         {
-            $this->db->query("SELECT * FROM users_disciplines WHERE userId = :id");
+            $this->db->query("SELECT * from disciplines d JOIN users_disciplines ud ON d.id = ud.disciplineId WHERE ud.userId = :id");
             $this->db->bind(':id', $id);
 
             $results = $this->db->resultSet();

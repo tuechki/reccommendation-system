@@ -25,6 +25,35 @@
             return $row;
         }
 
+        public function getUsersByDisciplineId($id){
+            $this->db->query("SELECT * FROM usersDisciplines WHERE disciplineId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function getDisciplinesByUserId($id)
+        {
+            $this->db->query("SELECT * FROM users_disciplines WHERE userId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
+        public function getDisciplinesIdsByUserId($id)
+        {
+            $this->db->query("SELECT disciplineId FROM users_disciplines WHERE userId = :id");
+            $this->db->bind(':id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
+        }
+
         public function addDiscipline($data){
                 $this->db->query("INSERT INTO disciplines (
                 disciplineNameBg
@@ -215,6 +244,18 @@
             $this->db->query("SELECT code FROM depend_by WHERE disciplineId=$id");
             $results = $this->db->resultSet();
             return $results;
+        }
+
+        public function enroll($userId, $disciplineId) {
+            $this->db->query('INSERT INTO users_disciplines (userId, disciplineId) VALUES (:userId, :disciplineId)');
+
+            $this->db->bind(':userId', $userId);
+            $this->db->bind(':disciplineId', $disciplineId);
+
+            if($this->db->execute()){
+                return true;
+            }
+            return false;
         }
 
         public function search($field, $searchInput){

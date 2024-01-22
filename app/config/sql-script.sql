@@ -42,6 +42,13 @@ CREATE TABLE `users_disciplines` (`userId` INT NOT NULL, `disciplineId` INT NOT 
                                   CONSTRAINT FK_userid_id FOREIGN KEY (userId) REFERENCES Users(id),
                                   CONSTRAINT FK_disciplineid_id FOREIGN KEY (disciplineId) REFERENCES Disciplines(id));
 
+CREATE TABLE `users_details` (`userId` INT(11) NOT NULL, `specialtiesAndCourses` VARCHAR(500) DEFAULT '', `oks` VARCHAR(50) DEFAULT '',
+                              `year` VARCHAR(4) DEFAULT '', `fn` VARCHAR(25) DEFAULT '', `interests` TEXT DEFAULT '',
+                                PRIMARY KEY (`userId`),
+                                CONSTRAINT `FK_user_details_userid_id` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`));
+
+
+
 /*
 	Insert sample data - the info of three disciplines and several curriculums (bachelors and masters).
 */
@@ -75,4 +82,6 @@ INSERT INTO `disciplines` (`id`, `disciplineNameBg`, `disciplineNameEng`, `speci
 INSERT INTO `curriculum_disciplines` (`curriculumId`, `disciplineId`) VALUES (1, 3), (3, 3), (5, 3),(7, 3);
 
 INSERT INTO `depends_on` (`disciplineId`, `code`) VALUES ('3', 'ОСПР123');
+
+INSERT INTO `users_details` (`userId`) VALUES (1), (2);
 

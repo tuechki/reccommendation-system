@@ -14,7 +14,11 @@
         <?php endif; ?>
         
         <div class="right">
-            <p>Здравей, <?php echo $_SESSION['user_name']; ?>!</p>
+            <?php if($_SESSION['user_role'] == 'admin') : ?>
+                <p><?php echo $_SESSION['user_name']; ?></p>
+            <?php else: ?>
+                <a class="nav-link" id="profile" href="<?php echo URLROOT; ?>/users/profile"><?php echo $_SESSION['user_name']; ?></a>
+            <?php endif; ?>
             <a class="nav-link" id="logout" href="<?php echo URLROOT; ?>/users/logout">Изход</a>
         </div> 
        

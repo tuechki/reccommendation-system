@@ -35,3 +35,7 @@ body {
 .navbar .logout {
     float: right;
 }
+
+.navbar .profile {
+    float: right;
+}

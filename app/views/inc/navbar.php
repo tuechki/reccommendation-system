@@ -4,13 +4,13 @@
         
             <a class="nav-link" href="<?php echo URLROOT; ?>/curriculums/index">Учебни планове</a>
             <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/index">Дисциплини</a>
-            <?php if($_SESSION['user_role'] != 'admin') : ?>
+            <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/export" class="btn">Експортиране</a>
+        <?php if($_SESSION['user_role'] != 'admin') : ?>
                 <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/enrolled">Записани дисциплини</a>
             <?php endif; ?>
             <?php if($_SESSION['user_role'] == 'admin') : ?>
                 <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/import" class="btn">Добави дисциплини</a>
                 <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/stats" class="btn">Статистики</a>
-                <a class="nav-link" href="<?php echo URLROOT; ?>/disciplines/export" class="btn">Експортиране</a>
         <?php endif; ?>
         
         <div class="right">

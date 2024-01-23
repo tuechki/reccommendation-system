@@ -950,10 +950,10 @@
         }
 
         public function export(){
-             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+             if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
                  $exportType = $_POST['export_type'];
 
-                 if ($exportType == 'disciplinesByUsers') {
+                 if ($exportType == 'disciplinesByUsers' && $_SESSION['user_role'] == 'admin') {
                      $disciplinesByUsers = [];
 
                      $users = $this->userModel->getUsers();
@@ -976,6 +976,20 @@
                      flush();
 
                      echo $jsonData;
+                 } else if ($exportType == 'disciplinesForUser' && $_SESSION['user_role'] != 'admin') {
+                     $userId = $_SESSION['user_id'];
+
+                     $disciplines = $this->disciplineModel->getDisciplinesByUserId($userId);
+
+                     $jsonData = json_encode($disciplines, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+                     header('Content-Type: application/json');
+                     header('Content-Disposition: attachment; filename="disciplines.json"');
+
+                     ob_clean();
+                     flush();
+
+                    echo $jsonData;
                  } else {
                      $this->view('disciplines/export');
                  }
